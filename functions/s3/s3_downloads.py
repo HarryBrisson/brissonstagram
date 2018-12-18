@@ -28,3 +28,7 @@ def get_list_of_s3_object_keys(bucket,prefix=None):
 
 	return keys
 
+
+def download_file_from_s3(bucket,key,destination):
+	s3 = get_credentialed_s3_resource()
+	s3.Bucket(bucket).download_file(key, destination)

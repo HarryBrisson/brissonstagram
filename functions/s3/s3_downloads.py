@@ -17,12 +17,14 @@ def get_credentialed_s3_resource():
 
 	return s3
 
-def get_list_of_s3_object_keys(bucket):
+def get_list_of_s3_object_keys(bucket,prefix=None):
 
 	s3 = get_credentialed_s3_resource()
 
-
-	keys = [blob.key for blob in s3.Bucket(bucket).objects.all()]
+	if prefix:
+		keys = [blob.key for blob in s3.Bucket(bucket).objects.filter(Prefix=prefix)]
+	else:
+		keys = [blob.key for blob in s3.Bucket(bucket).objects.all()]
 
 	return keys
 

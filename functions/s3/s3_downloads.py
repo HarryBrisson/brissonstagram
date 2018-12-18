@@ -19,16 +19,8 @@ def get_credentialed_s3_resource():
 
 def get_list_of_s3_object_keys(bucket):
 
-	# access credentials folder
-	with open('authorizations/aws-credentials.json') as f:
-		cred = json.load(f)
+	s3 = get_credentialed_s3_resource()
 
-	# access s3 using credentials
-	s3 = boto3.resource(
-		's3',
-		aws_access_key_id=cred["aws_access_key_id"],
-		aws_secret_access_key=cred["aws_secret_access_key"]
-		)
 
 	keys = [blob.key for blob in s3.Bucket(bucket).objects.all()]
 

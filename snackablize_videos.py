@@ -32,3 +32,6 @@ def snackablize_videos():
     for k in home_video_keys:
         snackablize_video_by_s3_key(k)
 
+
+if __name__ == '__main__':
+	snackablize_videos()

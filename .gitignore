@@ -3,3 +3,4 @@
 authorizations/aws-credentials.json
 *.pyc
 temp/*.mpg*
+temp/clips/*.mp4*

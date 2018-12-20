@@ -26,7 +26,7 @@ def snackablize_video_by_s3_key(k):
     
 def snackablize_videos():
 
-    keys = get_list_of_s3_object_keys('brissonstagram',filter='full-length')
+    keys = get_list_of_s3_object_keys('brissonstagram',prefix='full-length')
     home_video_keys = [k for k in keys if 'Home Video #' in k]
 
     for k in home_video_keys:

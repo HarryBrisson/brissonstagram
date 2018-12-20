@@ -6,7 +6,7 @@ import subprocess as sp
 
 def snackablize_video_by_s3_key(k):
 
-    download_file_from_s3(bucket,k,'temp/temp.mpg')
+    download_file_from_s3('brissonstagram',k,'temp/temp.mpg')
 
     filenamebase = k.split('.')[0].split('/')[-1].replace('Home Video #','').replace(' -- ','-')
     cmd = 'ffmpeg -i temp/temp.mpg -acodec copy -f segment -segment_time 5 -vcodec copy -reset_timestamps 1 -map 0 temp/clips/{}-%04d.mp4'.format(filenamebase)

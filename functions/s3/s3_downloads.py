@@ -1,6 +1,5 @@
 import boto3
-import pandas as pd
-import json
+
 
 def get_credentialed_s3_resource():
 

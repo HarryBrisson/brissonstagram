@@ -22,14 +22,19 @@ def get_random_frame_from_clip(video_filename, image_filename):
     sp.call('ffmpeg -ss 00:00:0{} -i {} -y -vframes 1 -q:v 2 {}'.format(sec,video_filename,image_filename),shell=True)
 
 
-def create_boomerang_gif():
+def create_boomerang_gif(bitrate=140000, length=2, framerate=15):
 
-    vid_filename = "temp/tempvid.mp4"
-    compressed_filename = "temp/tempsmall.mp4"
-    gif_filename = "temp/tempgif.gif"
+    vid_filename = "temp/rawvid.mp4"
+    abbrv_filename = "temp/abbrv.mp4"
+    compressed_filename = "temp/compressed.mp4"
+    gif_filename = "temp/gif.gif"
 
-    small_cmd = 'ffmpeg -y -i {} -b 200000 {}'.format(vid_filename, compressed_filename)
-    gif_maker_cmd = 'ffmpeg -y -i {} -filter_complex "[0]reverse[r];[0][r]concat,loop=1:0,setpts=N/25/TB" -f gif -pix_fmt yuv420p {}'.format(compressed_filename, gif_filename)
-    sp.call(small_cmd,shell=True)
+    compress_cmd = 'ffmpeg -y -i {} -b {} {}'.format(vid_filename, bitrate, compressed_filename)
+    abbrv_cmd = 'ffmpeg -y -ss 1 -t {} -i {} {}'.format(length, compressed_filename, abbrv_filename)
+    gif_maker_cmd = 'ffmpeg -y -i {} -r {} -filter_complex "[0]reverse[r];[0][r]concat,loop=1:0,setpts=N/{}/TB" -f gif {}'.format(abbrv_filename, framerate, framerate*2, gif_filename)
+    sp.call(compress_cmd,shell=True)
+    sp.call(abbrv_cmd,shell=True)
     sp.call(gif_maker_cmd,shell=True)
+
+
 

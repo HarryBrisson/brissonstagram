@@ -37,4 +37,15 @@ def create_boomerang_gif(bitrate=140000, length=2, framerate=15):
     sp.call(gif_maker_cmd,shell=True)
 
 
+def create_gram_ready_video():
+    
+    vid_filename = "temp/rawvid.mp4"
+    square_filename = "temp/square.mp4"
+    gram_ready_filename = "temp/gram_ready.mp4"
+
+    square_cmd = 'ffmpeg -y -i {} -vf "crop=\'min(iw,1*ih)\':\'min(iw/1,ih)\',scale=720:720" {}'.format(vid_filename, square_filename)
+    boomerang_cmd = 'ffmpeg -y -i {} -filter_complex "[0]reverse[r];[0][r]concat,loop=1:0,setpts=N/25/TB" {}'.format(square_filename, gram_ready_filename)
+    sp.call(square_cmd,shell=True)
+    sp.call(boomerang_cmd,shell=True)
+
 

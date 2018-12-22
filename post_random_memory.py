@@ -1,5 +1,8 @@
 import random
+import json
 import subprocess as sp
+
+import tweepy
 
 from functions.s3.s3_downloads import *
     

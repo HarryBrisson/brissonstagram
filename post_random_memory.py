@@ -15,7 +15,7 @@ def get_random_clip_key():
 
 def download_random_clip():
     key = get_random_clip_key()
-    download_file_from_s3('brissonstagram',key,'temp/tempvid.mp4')
+    download_file_from_s3('brissonstagram',key,'temp/rawvid.mp4')
 
 def get_random_frame_from_clip(video_filename, image_filename):
     sec = random.randrange(5)

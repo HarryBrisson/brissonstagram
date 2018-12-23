@@ -27,7 +27,7 @@ then, access that key
 then, paste that to the deploy keys for this project
 
 
-### clone repo from github
+### clone repo from github & prep your server
 
 finally, use git to clone this project onto your ec2 instance
 

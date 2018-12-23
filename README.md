@@ -64,3 +64,7 @@ run the snackablize function!
 after you break down your videos into clips, you can run the post random memory script
 
 `python3 post_random_memory.py`
+
+you can also set up a crontab to run every 6 hours; edit your scheduled tasks using `crontab -e` then add the below code at the end of the file
+
+`0 */6 * * * python3 post_random_memory.py`

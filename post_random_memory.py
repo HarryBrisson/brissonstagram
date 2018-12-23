@@ -64,3 +64,13 @@ def tweet_boomerang_gif(status=''):
 
     gif = api.media_upload('temp/gif.gif')
     api.update_status(status=status,media_ids=[gif.media_id])
+
+def post_random_memory():
+    download_random_clip()
+    create_boomerang_gif()
+    tweet_boomerang_gif()
+    create_gram_ready_video()
+    send_attachment_over_email(
+        'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
+        'Brissonstagram Video', 'temp/gram_ready.mp4'
+    )

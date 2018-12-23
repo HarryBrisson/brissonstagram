@@ -39,10 +39,11 @@ run the initialize script to set up everything you need program and module-wise
 
 `bash initialize.sh`
 
-now, add in your key for aws
+now, add in your key for aws and your email/password for gmail
 
 `nano authorizations/aws-credentials.json`
 
+`nano authorizations/gmail-credentials.json`
 
 ### time to run the function
 

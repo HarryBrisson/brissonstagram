@@ -75,10 +75,25 @@ def tweet_media(media_filepath,status=''):
     print('posting tweet')
     api.update_status(status=status,media_ids=[gif.media_id])
 
+
+def post_boomerang_gif_to_twitter():
+
+    bitrate=140000
+    keep_going = True
+
+    while keep_going and bitrate>0:
+        try:
+            create_boomerang_gif(bitrate=bitrate, length=2, framerate=15)
+            tweet_media('temp/gif.gif')
+            keep_going = False
+        except:
+            bitrate = bitrate-10000
+
+
+
 def post_random_memory():
     download_random_clip()
-    create_boomerang_gif()
-    tweet_boomerang_gif()
+    post_boomerang_gif_to_twitter()
     create_gram_ready_video()
     send_attachment_over_email(
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],

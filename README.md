@@ -39,13 +39,9 @@ run the initialize script to set up everything you need program and module-wise
 
 `bash initialize.sh`
 
-now, add in your credentials for aws, twitter & gmail
+now, add in your credentials for aws
 
 `nano authorizations/aws-credentials.json`
-
-`nano authorizations/twitter-credentials.json`
-
-`nano authorizations/gmail-credentials.json`
 
 
 ### time to prepare the clips
@@ -57,6 +53,15 @@ then, you can start up tmux to keep the function going even if you disconnect
 run the snackablize function!
 
 `python3 snackablize_videos.py`
+
+
+### add additional credentials
+
+similar to how you did previously, you'll just want to add credentials for twitter & gmail
+
+`nano authorizations/twitter-credentials.json`
+
+`nano authorizations/gmail-credentials.json`
 
 
 ### bring your memories into the light

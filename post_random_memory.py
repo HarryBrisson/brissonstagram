@@ -42,11 +42,15 @@ def create_gram_ready_video():
     
     vid_filename = "temp/rawvid.mp4"
     square_filename = "temp/square.mp4"
+    reverse_filename = "temp/reverse.mp4"
     gram_ready_filename = "temp/gram_ready.mp4"
 
     square_cmd = 'ffmpeg -y -i {} -vf "crop=\'min(iw,1*ih)\':\'min(iw/1,ih)\',scale=720:720" {}'.format(vid_filename, square_filename)
-    boomerang_cmd = 'ffmpeg -y -i {} -filter_complex "[0]reverse[r];[0][r]concat,loop=1:0,setpts=N/25/TB" {}'.format(square_filename, gram_ready_filename)
+    reverse_cmd = 'ffmpeg -y -i {} -vf reverse -af areverse {}'.format(square_filename, reverse_filename)
+    boomerang_cmd = 'ffmpeg -y -i {} -i {} -filter_complex "[0:v] [0:a] [1:v] [1:a] concat=n=2:v=1:a=1 [v] [a]" -map "[v]" -map "[a]" {}'.format(square_filename, reverse_filename, gram_ready_filename)
+    
     sp.call(square_cmd,shell=True)
+    sp.call(reverse_cmd,shell=True)
     sp.call(boomerang_cmd,shell=True)
 
 

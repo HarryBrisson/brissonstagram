@@ -8,3 +8,4 @@ temp/*.jpg
 temp/*.mp4
 temp/*.gif
 authorizations/twitter-credentials.json
+authorizations/gmail-credentials.json

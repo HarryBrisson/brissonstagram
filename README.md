@@ -56,3 +56,9 @@ run the snackablize function!
 
 `python3 snackablize_videos.py`
 
+
+### bring your memories into the light
+
+after you break down your videos into clips, you can run the post random memory script
+
+`python3 post_random_memory.py`

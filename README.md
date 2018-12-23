@@ -55,6 +55,11 @@ run the snackablize function!
 `python3 snackablize_videos.py`
 
 
+## editing the videos into clips
+
+if you've already done the above steps, then all you'll need to do is the following
+
+
 ### add additional credentials
 
 similar to how you did previously, you'll just want to add credentials for twitter & gmail

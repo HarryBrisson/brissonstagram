@@ -78,7 +78,7 @@ def tweet_media(media_filepath,status=''):
 
 def post_boomerang_gif_to_twitter():
 
-    bitrate=140000
+    bitrate=150000
     keep_going = True
 
     while keep_going and bitrate>0:

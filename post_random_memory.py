@@ -5,6 +5,7 @@ import subprocess as sp
 import tweepy
 
 from functions.s3.s3_downloads import *
+from functions.send_attachment import *
     
     
 def get_random_clip_key():

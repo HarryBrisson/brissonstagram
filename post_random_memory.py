@@ -9,13 +9,15 @@ from functions.send_attachment import *
     
     
 def get_random_clip_key():
-
+    print('accessing list of all clips')
     keys = get_list_of_s3_object_keys('brissonstagram',prefix='clips')
+    print('selecting random clip')
     key = random.choice(keys)
     return key
 
 def download_random_clip():
     key = get_random_clip_key()
+    print('downloading {}'.format(key))
     download_file_from_s3('brissonstagram',key,'temp/rawvid.mp4')
 
 def get_random_frame_from_clip(video_filename, image_filename):
@@ -24,6 +26,8 @@ def get_random_frame_from_clip(video_filename, image_filename):
 
 
 def create_boomerang_gif(bitrate=140000, length=2, framerate=15):
+
+    print('creating {}s {}fps boomerang gif w/ {} bitrate'.format(length,framerate,bitrate))
 
     vid_filename = "temp/rawvid.mp4"
     abbrv_filename = "temp/abbrv.mp4"
@@ -39,6 +43,8 @@ def create_boomerang_gif(bitrate=140000, length=2, framerate=15):
 
 
 def create_gram_ready_video():
+
+    print('creating gram-friendly square video')
     
     vid_filename = "temp/rawvid.mp4"
     square_filename = "temp/square.mp4"
@@ -56,8 +62,10 @@ def create_gram_ready_video():
 
 def tweet_boomerang_gif(status=''):
 
+    print('accessing Twitter credentials')
     cred = json.loads(open('authorizations/twitter-credentials.json').read())
     
+    print('logging into Twitter')
     auth = tweepy.OAuthHandler(cred['CONSUMER_KEY'], cred['CONSUMER_SECRET'])
     auth.set_access_token(cred['ACCESS_TOKEN'], cred['ACCESS_TOKEN_SECRET'])
     api = tweepy.API(auth)

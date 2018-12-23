@@ -60,7 +60,7 @@ def create_gram_ready_video():
     sp.call(boomerang_cmd,shell=True)
 
 
-def tweet_boomerang_gif(status=''):
+def tweet_media(media_filepath,status=''):
 
     print('accessing Twitter credentials')
     cred = json.loads(open('authorizations/twitter-credentials.json').read())
@@ -70,7 +70,9 @@ def tweet_boomerang_gif(status=''):
     auth.set_access_token(cred['ACCESS_TOKEN'], cred['ACCESS_TOKEN_SECRET'])
     api = tweepy.API(auth)
 
-    gif = api.media_upload('temp/gif.gif')
+    print('uploading media')
+    gif = api.media_upload('media_filepath')
+    print('posting tweet')
     api.update_status(status=status,media_ids=[gif.media_id])
 
 def post_random_memory():

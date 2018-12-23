@@ -45,13 +45,14 @@ now, add in your key for aws and your email/password for gmail
 
 `nano authorizations/gmail-credentials.json`
 
-### time to run the function
+
+### time to prepare the clips
 
 then, you can start up tmux to keep the function going even if you disconnect
 
 `tmux`
 
-finally, run the snackablize function!
+run the snackablize function!
 
 `python3 snackablize_videos.py`
 

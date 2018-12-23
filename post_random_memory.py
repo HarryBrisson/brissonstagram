@@ -74,3 +74,7 @@ def post_random_memory():
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
         'Brissonstagram Video', 'temp/gram_ready.mp4'
     )
+
+
+if __name__ == '__main__':
+    post_random_memory()

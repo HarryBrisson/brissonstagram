@@ -71,7 +71,7 @@ def tweet_media(media_filepath,status=''):
     api = tweepy.API(auth)
 
     print('uploading media')
-    gif = api.media_upload('media_filepath')
+    gif = api.media_upload(media_filepath)
     print('posting tweet')
     api.update_status(status=status,media_ids=[gif.media_id])
 

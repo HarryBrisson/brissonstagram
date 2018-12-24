@@ -77,4 +77,4 @@ after you break down your videos into clips, you can run the post random memory 
 
 you can also set up a crontab to run every 6 hours; edit your scheduled tasks using `crontab -e` then add the below code at the end of the file
 
-`0 */6 * * * shell /home/ubuntu/brissonstagram/run.sh`
+`0 */6 * * * bash /home/ubuntu/brissonstagram/run.sh`

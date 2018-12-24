@@ -110,4 +110,13 @@ def post_random_memory():
 
 
 if __name__ == '__main__':
-    post_random_memory()
+    trials = 0
+    while trials < 5:
+        try:
+            post_random_memory()
+            break
+        except:
+            trials = trials + 1
+
+
+

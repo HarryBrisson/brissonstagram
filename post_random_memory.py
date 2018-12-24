@@ -1,6 +1,7 @@
 import random
 import json
 import subprocess as sp
+import os
 
 import tweepy
 
@@ -90,6 +91,12 @@ def post_boomerang_gif_to_twitter():
             bitrate = bitrate-10000
 
 
+def clear_temp_folder_of_media_files():
+    media_files = ['temp/{}'.format(f) for f in os.listdir('temp')\
+               if ('mp4' in f or 'gif' in f or 'jpg' in f)]
+    for f in media_files:
+        os.remove(f)
+
 
 def post_random_memory():
     download_random_clip()
@@ -99,6 +106,7 @@ def post_random_memory():
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
         'Brissonstagram Video', 'temp/gram_ready.mp4'
     )
+    clear_temp_folder_of_media_files()
 
 
 if __name__ == '__main__':

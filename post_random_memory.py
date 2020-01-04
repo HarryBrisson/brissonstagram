@@ -65,12 +65,13 @@ def create_gram_ready_image():
     print('creating gram-friendly square video')
     
     vid_filename = "temp/rawvid.mp4"
-    square_filename = "temp/square.png"
+    square_filename = "temp/square.mp4"
 
     square_cmd = 'ffmpeg -y -i {} -vf "crop=\'min(iw,1*ih)\':\'min(iw/1,ih)\',scale=720:720" {}'.format(vid_filename, square_filename)
     
     sp.call(square_cmd,shell=True)
 
+    get_random_frame_from_clip(square_filename, 'temp/square.jpg')
 
 def tweet_media(media_filepath,status=''):
 

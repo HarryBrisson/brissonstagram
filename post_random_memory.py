@@ -60,6 +60,17 @@ def create_gram_ready_video():
     sp.call(reverse_cmd,shell=True)
     sp.call(boomerang_cmd,shell=True)
 
+def create_gram_ready_image():
+
+    print('creating gram-friendly square video')
+    
+    vid_filename = "temp/rawvid.mp4"
+    square_filename = "temp/square.png"
+
+    square_cmd = 'ffmpeg -y -i {} -vf "crop=\'min(iw,1*ih)\':\'min(iw/1,ih)\',scale=720:720" {}'.format(vid_filename, square_filename)
+    
+    sp.call(square_cmd,shell=True)
+
 
 def tweet_media(media_filepath,status=''):
 

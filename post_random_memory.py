@@ -4,6 +4,7 @@ import subprocess as sp
 import os
 
 import tweepy
+from instapy_cli import client
 
 from functions.s3.s3_downloads import *
 from functions.send_attachment import *

@@ -117,6 +117,16 @@ def get_ig_auth():
 
     return auth
 
+def post_gram_video():
+
+    auth = get_ig_auth()
+    username = auth['username']
+    password = auth['password']
+    video = 'temp/gram_ready.mp4'
+    text = '#brissonstagram'
+
+    with client(username, password) as cli:
+        cli.upload(video, text)
 
 def post_random_memory():
     download_random_clip()

@@ -110,6 +110,13 @@ def clear_temp_folder_of_media_files():
     for f in media_files:
         os.remove(f)
 
+def get_ig_auth():
+
+    with open('authorizations/ig-credentials.json') as f:
+        auth = json.loads(f.read())
+
+    return auth
+
 
 def post_random_memory():
     download_random_clip()

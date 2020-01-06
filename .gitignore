@@ -1,6 +1,7 @@
 *.DS_Store
 *.ipynb
 authorizations/aws-credentials.json
+authorizations/ig-credentials.json
 *.pyc
 temp/*.mpg*
 temp/clips/*.mp4*

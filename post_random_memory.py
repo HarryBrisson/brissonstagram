@@ -117,7 +117,6 @@ def get_ig_auth():
 
     return auth
 
-def post_gram_video():
 
     auth = get_ig_auth()
     username = auth['username']

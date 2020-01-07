@@ -117,20 +117,23 @@ def get_ig_auth():
 
     return auth
 
+def post_gram_image():
 
     auth = get_ig_auth()
     username = auth['username']
     password = auth['password']
-    video = 'temp/gram_ready.mp4'
+    image = 'temp/square.jpg'
     text = '#brissonstagram'
 
     with client(username, password) as cli:
-        cli.upload(video, text)
+        cli.upload(image, text)
 
 def post_random_memory():
     download_random_clip()
     post_boomerang_gif_to_twitter()
     create_gram_ready_video()
+    create_gram_ready_image()
+    post_gram_video()
     send_attachment_over_email(
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
         'Brissonstagram Video', 'temp/gram_ready.mp4'

@@ -4,7 +4,7 @@ import subprocess as sp
 import os
 
 import tweepy
-from instapy_cli import client
+from InstagramAPI import InstagramAPI
 
 from functions.s3.s3_downloads import *
 from functions.send_attachment import *
@@ -120,20 +120,20 @@ def get_ig_auth():
 def post_gram_image():
 
     auth = get_ig_auth()
-    username = auth['username']
-    password = auth['password']
     image = 'temp/square.jpg'
     text = '#brissonstagram'
 
-    with client(username, password) as cli:
-        cli.upload(image, text)
+    igapi = InstagramAPI( auth['username'], auth['password'] )
+    igapi.login()
+    igapi.uploadPhoto(image, caption=text, upload_id=None )
+
 
 def post_random_memory():
     download_random_clip()
     post_boomerang_gif_to_twitter()
     create_gram_ready_video()
     create_gram_ready_image()
-    post_gram_video()
+    post_gram_image()
     send_attachment_over_email(
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
         'Brissonstagram Video', 'temp/gram_ready.mp4'

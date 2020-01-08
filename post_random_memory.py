@@ -143,11 +143,12 @@ def post_random_memory():
 
 if __name__ == '__main__':
     trials = 0
-    while trials < 5:
+    while trials < 1:
         try:
             post_random_memory()
             break
-        except:
+        except Exception as e:
+            print(e)
             trials = trials + 1
 
 

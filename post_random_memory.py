@@ -8,6 +8,7 @@ from InstagramAPI import InstagramAPI
 
 from functions.s3.s3_downloads import *
 from functions.send_attachment import *
+from functions.respond_to_login_challenge import *
     
     
 def get_random_clip_key():
@@ -117,39 +118,53 @@ def get_ig_auth():
 
     return auth
 
+
+
+
+
 def post_gram_image():
 
     auth = get_ig_auth()
     image = 'temp/square.jpg'
     text = '#brissonstagram'
 
-    igapi = InstagramAPI( auth['username'], auth['password'] )
-    igapi.login()
-    igapi.uploadPhoto(image, caption=text, upload_id=None )
+
+    InstagramAPI.ver = login_challenge
+    api = InstagramAPI(auth['username'], auth['password'])
+    api.login()
+    try:
+        link = api.LastJson['challenge']['api_path']
+        api.ver(link)
+        api.login()
+    except:
+        pass
+
+    api.uploadPhoto(image, caption=text, upload_id=None )
 
 
 def post_random_memory():
-    download_random_clip()
-    post_boomerang_gif_to_twitter()
-    create_gram_ready_video()
-    create_gram_ready_image()
+    # download_random_clip()
+    # post_boomerang_gif_to_twitter()
+    # create_gram_ready_video()
+    # create_gram_ready_image()
     post_gram_image()
-    send_attachment_over_email(
-        'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
-        'Brissonstagram Video', 'temp/gram_ready.mp4'
-    )
-    clear_temp_folder_of_media_files()
+    # send_attachment_over_email(
+    #     'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
+    #     'Brissonstagram Video', 'temp/gram_ready.mp4'
+    # )
+    # clear_temp_folder_of_media_files()
 
 
 if __name__ == '__main__':
-    trials = 0
-    while trials < 1:
-        try:
-            post_random_memory()
-            break
-        except Exception as e:
-            print(e)
-            trials = trials + 1
+    # trials = 0
+    # while trials < 1:
+    #     try:
+    #         post_random_memory()
+    #         break
+    #     except Exception as e:
+    #         print(e)
+    #         trials = trials + 1
 
+    post_random_memory()
 
 

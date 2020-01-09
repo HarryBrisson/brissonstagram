@@ -142,7 +142,7 @@ def post_gram_image():
         pass
 
     print(api.uploadPhoto(image, caption=text ))
-    pprint(api.LastJson)
+    pprint.pprint(api.LastJson)
 
 
 def post_random_memory():

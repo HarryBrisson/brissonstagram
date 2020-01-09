@@ -12,3 +12,4 @@ temp/*.gif
 authorizations/twitter-credentials.json
 authorizations/gmail-credentials.json
 chromedriver
+log*.json

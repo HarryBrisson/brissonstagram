@@ -134,6 +134,8 @@ def post_gram_image():
     api = InstagramAPI(auth['username'], auth['password'])
     api.login()
 
+
+
     try:
         link = api.LastJson['challenge']['api_path']
         api.ver(link)
@@ -141,15 +143,21 @@ def post_gram_image():
     except:
         pass
 
-    print(api.uploadPhoto(image, caption=text ))
-    pprint.pprint(api.LastJson)
+
+    api.uploadPhoto(image, caption=text )
+
+    with open('log.json','w') as f:
+        f.write(json.dumps(api.LastJson))
+
+    with open('log2.json','w') as f:
+        f.write(json.dumps(api.LastResponse.content))
 
 
 def post_random_memory():
     # download_random_clip()
     # post_boomerang_gif_to_twitter()
     # create_gram_ready_video()
-    create_gram_ready_image()
+    # create_gram_ready_image()
     post_gram_image()
     # send_attachment_over_email(
     #     'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],

@@ -2,6 +2,7 @@ import random
 import json
 import subprocess as sp
 import os
+import pprint
 
 import tweepy
 from InstagramAPI import InstagramAPI
@@ -73,7 +74,7 @@ def create_gram_ready_image():
     
     sp.call(square_cmd,shell=True)
 
-    get_random_frame_from_clip(square_filename, 'temp/square.jpg')
+    get_random_frame_from_clip(square_filename, 'temp/square.png')
 
 def tweet_media(media_filepath,status=''):
 
@@ -125,13 +126,14 @@ def get_ig_auth():
 def post_gram_image():
 
     auth = get_ig_auth()
-    image = 'temp/square.jpg'
+    image = 'temp/square.png'
     text = '#brissonstagram'
 
 
     InstagramAPI.ver = login_challenge
     api = InstagramAPI(auth['username'], auth['password'])
     api.login()
+
     try:
         link = api.LastJson['challenge']['api_path']
         api.ver(link)
@@ -139,14 +141,15 @@ def post_gram_image():
     except:
         pass
 
-    api.uploadPhoto(image, caption=text, upload_id=None )
+    print(api.uploadPhoto(image, caption=text ))
+    pprint(api.LastJson)
 
 
 def post_random_memory():
     # download_random_clip()
     # post_boomerang_gif_to_twitter()
     # create_gram_ready_video()
-    # create_gram_ready_image()
+    create_gram_ready_image()
     post_gram_image()
     # send_attachment_over_email(
     #     'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],

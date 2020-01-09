@@ -6,6 +6,7 @@ authorizations/ig-credentials.json
 temp/*.mpg*
 temp/clips/*.mp4*
 temp/*.jpg
+temp/*.png
 temp/*.mp4
 temp/*.gif
 authorizations/twitter-credentials.json

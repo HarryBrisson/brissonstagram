@@ -6,6 +6,7 @@ import pprint
 
 import tweepy
 from InstagramAPI import InstagramAPI
+from instapy_cli import client
 
 from functions.s3.s3_downloads import *
 from functions.send_attachment import *
@@ -146,19 +147,49 @@ def post_gram_image():
 
     api.uploadPhoto(image, caption=text )
 
-    with open('log.json','w') as f:
-        f.write(json.dumps(api.LastJson))
+    # with open('log.json','w') as f:
+    #     f.write(json.dumps(api.LastJson))
 
-    with open('log2.json','w') as f:
-        f.write(json.dumps(api.LastResponse.content))
+    # with open('log2.json','w') as f:
+    #     f.write(json.dumps(api.LastResponse.content))
 
+def post_gram_image2():
+
+    auth = get_ig_auth()
+
+    username = auth['username']
+    password = auth['password']
+    cookie = json.dumps(auth['cookie'])
+    image = 'temp/square.png'
+    text = '#brissonstagram'
+
+    with client(username, password, cookie=cookie) as cli:
+        cookies = cli.get_cookie()
+        print(type(cookies)) # == str
+        print(cookies)
+        # do stuffs with cli
+        ig = cli.api()
+        me = ig.current_user()
+        print(me)
+
+        cli.upload(image, text)
 
 def post_random_memory():
     # download_random_clip()
     # post_boomerang_gif_to_twitter()
     # create_gram_ready_video()
     # create_gram_ready_image()
-    post_gram_image()
+    
+    try:
+        post_gram_image()
+    except Exception as e:
+        print(e)
+
+    try:
+        post_gram_image2()
+    except Exception as e:
+        print(e)
+
     # send_attachment_over_email(
     #     'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
     #     'Brissonstagram Video', 'temp/gram_ready.mp4'

@@ -41,3 +41,22 @@ def create_gram_ready_image():
     sp.call(compress_cmd,shell=True)
 
 
+def main():
+
+    fs = s3fs.S3FileSystem()
+
+    print('getting clip keys')
+    keys = get_clip_keys(fs=fs)
+    random.shuffle(keys)
+
+    for k in keys:
+        download_clip(k)
+        create_gram_ready_image()
+        new_key = '/'.join(['brissonstagram','jpgs']+k.split('/')[2:])
+        new_key = new_key.split('.')[0]+".jpg"
+        with open('temp/square.jpg','rb') as f:
+            data = f.read()
+        with fs.open(new_key,'wb') as f:
+            f.write(data)
+
+

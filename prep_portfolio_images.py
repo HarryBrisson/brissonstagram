@@ -19,3 +19,8 @@ def download_clip(key):
     with open('temp/rawvid.mp4','wb') as f:
         f.write(data)
 
+
+def get_random_frame_from_clip(video_filename, image_filename):
+    sec = random.randrange(5)
+    sp.call('ffmpeg -ss 00:00:0{} -i {} -y -vframes 1 -q:v 2 {}'.format(sec,video_filename,image_filename),shell=True)
+

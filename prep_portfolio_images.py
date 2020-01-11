@@ -60,3 +60,7 @@ def main():
             f.write(data)
 
 
+if __name__ == '__main__':
+    main()
+
+

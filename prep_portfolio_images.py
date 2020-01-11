@@ -11,3 +11,11 @@ def get_clip_keys(fs=None):
     keys = fs.find(f'brissonstagram/clips')
     return keys
 
+def download_clip(key):
+    print('downloading {}'.format(key))
+    fs = s3fs.S3FileSystem()
+    with fs.open(key,'rb') as f:
+        data = f.read()
+    with open('temp/rawvid.mp4','wb') as f:
+        f.write(data)
+

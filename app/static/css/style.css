@@ -1,0 +1,21 @@
+
+body {
+  background-color: black
+}
+
+#title {
+	text-align: center;
+}
+
+
+
+h1, h3, p {
+	color: white;
+}
+
+#text-container {
+	margin: 0 auto;
+	width: 600px;
+	text-align: center;
+}
+

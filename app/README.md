@@ -24,3 +24,14 @@ then you can intialize zappa and then deploy
 
 `zappa deploy dev`
 
+
+### set up the url
+
+AWS -> Certificate Manager
+* get a certificate for url
+* include the reference number in zappa_settings.json
+
+API Gateway -> Custom Domain Names -> Create Custom Domain Name
+* select ACM certificate
+* set up base path mapping (probably to prod)
+* set up CNAME for Target Domain Name

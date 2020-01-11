@@ -147,11 +147,6 @@ def post_gram_image():
 
     api.uploadPhoto(image, caption=text )
 
-    # with open('log.json','w') as f:
-    #     f.write(json.dumps(api.LastJson))
-
-    # with open('log2.json','w') as f:
-    #     f.write(json.dumps(api.LastResponse.content))
 
 def post_gram_image2():
 
@@ -175,38 +170,25 @@ def post_gram_image2():
         cli.upload(image, text)
 
 def post_random_memory():
-    # download_random_clip()
-    # post_boomerang_gif_to_twitter()
-    # create_gram_ready_video()
-    # create_gram_ready_image()
-    
-    try:
-        post_gram_image()
-    except Exception as e:
-        print(e)
-
-    try:
-        post_gram_image2()
-    except Exception as e:
-        print(e)
-
-    # send_attachment_over_email(
-    #     'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
-    #     'Brissonstagram Video', 'temp/gram_ready.mp4'
-    # )
-    # clear_temp_folder_of_media_files()
+    download_random_clip()
+    post_boomerang_gif_to_twitter()
+    create_gram_ready_video()
+    create_gram_ready_image()
+    send_attachment_over_email(
+        'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
+        'Brissonstagram Video', 'temp/gram_ready.mp4'
+    )
+    clear_temp_folder_of_media_files()
 
 
 if __name__ == '__main__':
-    # trials = 0
-    # while trials < 1:
-    #     try:
-    #         post_random_memory()
-    #         break
-    #     except Exception as e:
-    #         print(e)
-    #         trials = trials + 1
-
-    post_random_memory()
+    trials = 0
+    while trials < 1:
+        try:
+            post_random_memory()
+            break
+        except Exception as e:
+            print(e)
+            trials = trials + 1
 
 

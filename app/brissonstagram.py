@@ -26,8 +26,11 @@ def create_image_inventory():
 	return data
 
 
-def get_sample_of_images(n=100):
-    images = get_image_data()
-    sample = random.sample(images,n)
+def get_sample_of_images(n=100,force_update=False):
+	if force_update:
+		create_image_inventory()
+	images = get_image_data()
+	sample = random.sample(images,n)
+	return sample
 
-    
+	

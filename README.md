@@ -83,4 +83,5 @@ you can also set up a crontab to run every 6 hours; edit your scheduled tasks us
 ## where next
 
 is this a workaround to avoid instagramapi woes?
-https://developer.hootsuite.com/docs/message-scheduling
+https://developer.hootsuite.com/docs/message-scheduling ($240/yr?)
+https://buffer.com/developers/api/profiles#schedulesupdate (cancelled...)

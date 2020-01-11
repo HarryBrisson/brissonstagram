@@ -25,8 +25,7 @@
 		</div>
 	</body>
 	<script type="text/javascript">
-		data_string = {{ data_string|tojson }}
-		data = JSON.parse(data_string)
-		// initialize_images(data)
+		data = {{ data_string|tojson }}
+		show_images(data)
 	</script>
 </html>

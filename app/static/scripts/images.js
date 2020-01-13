@@ -10,9 +10,41 @@ function get_viz_size() {
   }
 }
 
+function initialize_tooltip() {
+  // Define the div for the tooltip
+  var tooltip = d3.select("#viz").append("div") 
+      .attr("class", "tooltip")       
+      .attr("id", "tooltip")     
+      .style("opacity", 0);
+}
+
+
+function tooltip_on(d) {    
+  div = d3.select("#tooltip")
+
+  viz_top = document.getElementById('viz').getBoundingClientRect().top
+  viz_left = document.getElementById('viz').getBoundingClientRect().left
+
+  div.transition()    
+      .duration(200)    
+      .style("opacity", .9);    
+  div.html("<img src=" + d["url"] + " height=150>")
+      .style("left", (d3.event.pageX-viz_left) + "px")   
+      .style("top", (d3.event.pageY-viz_top) + "px"); 
+};
+
+function tooltip_off(d) {   
+  div = d3.select("#tooltip")
+  div.transition()    
+      .duration(500)    
+      .style("opacity", 0); 
+};
+
 
 function show_images(data) {
 
+  initialize_tooltip()
+  
   var div_size = get_viz_size()
 
   // setting formating for chart
@@ -48,5 +80,15 @@ function show_images(data) {
       .attr("y", function(d,i) { return scale(i%10); })
       .attr("xlink:href", function(d) { return d['url']; })
       .attr("opacity",.5)
+      .on("mouseover", function(d) {
+          d3.select(this).transition().duration(500).attr("opacity",1);
+          tooltip_on(d);
+        })
+      .on("mouseout", function(d) {
+          d3.select(this).transition().duration(500).attr("opacity",.5);
+          tooltip_off(d);
+        })
+
+}
 
 

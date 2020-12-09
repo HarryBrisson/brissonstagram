@@ -2,20 +2,31 @@
 # use a style imitator to create art imitations and frame them?
 # examples:
 
-# code from here:  https://github.com/walid0925/AI_Artistry/blob/master/main.py
+# code from here:  https://github.com/tensorflow/docs/blob/master/site/en/tutorials/generative/style_transfer.ipynb
 # reference paintings from: https://www.rawpixel.com/board/537381/vincent-van-gogh-free-original-public-domain-paintings
 
 
+import os
+import tensorflow as tf
+import tensorflow_hub as hub
+
+# Load compressed models from tensorflow_hub
+os.environ['TFHUB_MODEL_LOAD_FORMAT'] = 'COMPRESSED'
+
+
 import numpy as np
-import pandas as pd
-from PIL import Image
-from keras import backend as K
-from keras.preprocessing.image import load_img, img_to_array
-from keras.applications import VGG16
-from keras.applications.vgg16 import preprocess_input
-from keras.layers import Input
-from scipy.optimize import fmin_l_bfgs_b
+import PIL.Image
 import time
+import functools
+
+def tensor_to_image(tensor):
+  tensor = tensor*255
+  tensor = np.array(tensor, dtype=np.uint8)
+  if np.ndim(tensor)>3:
+    assert tensor.shape[0] == 1
+    tensor = tensor[0]
+  return PIL.Image.fromarray(tensor)
+
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 ## Specify paths for 1) content image 2) style image and 3) generated image
@@ -30,57 +41,34 @@ genImOutputPath = 'temp/artsy.jpg'
 ## Image processing
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 
-def stylize_photo(cImPath,sImPath,genImOutputPath):
-	targetHeight = 512
-	targetWidth = 512
-	targetSize = (targetHeight, targetWidth)
 
-	cImageOrig = Image.open(cImPath)
-	cImageSizeOrig = cImageOrig.size
-	cImage = load_img(path=cImPath, target_size=targetSize)
-	cImArr = img_to_array(cImage)
-	cImArr = K.variable(preprocess_input(np.expand_dims(cImArr, axis=0)), dtype='float32')
+content_path = cImPath
+style_path = sImPath
 
-	sImage = load_img(path=sImPath, target_size=targetSize)
-	sImArr = img_to_array(sImage)
-	sImArr = K.variable(preprocess_input(np.expand_dims(sImArr, axis=0)), dtype='float32')
+def load_img(path_to_img):
+  max_dim = 512
+  img = tf.io.read_file(path_to_img)
+  img = tf.image.decode_image(img, channels=3)
+  img = tf.image.convert_image_dtype(img, tf.float32)
 
-	gIm0 = np.random.randint(256, size=(targetWidth, targetHeight, 3)).astype('float64')
-	gIm0 = preprocess_input(np.expand_dims(gIm0, axis=0))
+  shape = tf.cast(tf.shape(img)[:-1], tf.float32)
+  long_dim = max(shape)
+  scale = max_dim / long_dim
 
-	gImPlaceholder = K.placeholder(shape=(1, targetWidth, targetHeight, 3))
+  new_shape = tf.cast(shape * scale, tf.int32)
 
-	tf_session = K.get_session()
-	cModel = VGG16(include_top=False, weights='imagenet', input_tensor=cImArr)
-	sModel = VGG16(include_top=False, weights='imagenet', input_tensor=sImArr)
-	gModel = VGG16(include_top=False, weights='imagenet', input_tensor=gImPlaceholder)
-	cLayerName = 'block4_conv2'
-	sLayerNames = [
-	                'block1_conv1',
-	                'block2_conv1',
-	                'block3_conv1',
-	                'block4_conv1',
-	                #'block5_conv1'
-	                ]
+  img = tf.image.resize(img, new_shape)
+  img = img[tf.newaxis, :]
+  return img
 
-	P = get_feature_reps(x=cImArr, layer_names=[cLayerName], model=cModel)[0]
-	As = get_feature_reps(x=sImArr, layer_names=sLayerNames, model=sModel)
-	ws = np.ones(len(sLayerNames))/float(len(sLayerNames))
 
-	iterations = 600
-	x_val = gIm0.flatten()
-	start = time.time()
-	xopt, f_val, info= fmin_l_bfgs_b(calculate_loss, x_val, fprime=get_grad,
-	                            maxiter=iterations, disp=True)
-	xOut = postprocess_array(xopt)
-	xIm = save_original_size(xOut)
-	print('Image saved')
-	end = time.time()
-	print('Time taken: {}'.format(end-start))
+content_image = load_img(content_path)
+style_image = load_img(style_path)
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
-## Define loss and helper functions
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
+hub_model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
+stylized_image = hub_model(tf.constant(content_image), tf.constant(style_image))[0]
+tensor_to_image(stylized_image).save(genImOutputPath)
+
 
 def get_feature_reps(x, layer_names, model):
     featMatrices = []

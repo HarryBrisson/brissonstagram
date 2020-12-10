@@ -62,13 +62,14 @@ def load_img(path_to_img):
   img = img[tf.newaxis, :]
   return img
 
+def style_image_with_tensorflow_hub():
 
-# content_image = load_img(content_path)
-# style_image = load_img(style_path)
+    content_image = load_img(content_path)
+    style_image = load_img(style_path)
 
-# hub_model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
-# stylized_image = hub_model(tf.constant(content_image), tf.constant(style_image))[0]
-# tensor_to_image(stylized_image).save(genImOutputPath)
+    hub_model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
+    stylized_image = hub_model(tf.constant(content_image), tf.constant(style_image))[0]
+    tensor_to_image(stylized_image).save(genImOutputPath)
 
 
 
@@ -117,6 +118,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.applications import vgg19
 
+
 base_image_path = content_path
 style_reference_image_path = style_path
 result_prefix = genImOutputPath.split('.')[0]
@@ -130,7 +132,7 @@ content_weight = 2.5e-8
 width, height = keras.preprocessing.image.load_img(base_image_path).size
 img_nrows = 400
 img_ncols = int(width * img_nrows / height)
-
+            
 
 """
 ## Image preprocessing / deprocessing utilities
@@ -255,7 +257,7 @@ content_layer_name = "block5_conv2"
 
 
 def compute_loss(combination_image, base_image, style_reference_image):
-	print('computing loss')
+    print('computing loss')
     input_tensor = tf.concat(
         [base_image, style_reference_image, combination_image], axis=0
     )
@@ -305,31 +307,35 @@ resulting image every 100 iterations.
 We decay the learning rate by 0.96 every 100 steps.
 """
 
-optimizer = keras.optimizers.SGD(
-    keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate=100.0, decay_steps=100, decay_rate=0.96
+def style_image_with_keras():
+
+    optimizer = keras.optimizers.SGD(
+        keras.optimizers.schedules.ExponentialDecay(
+            initial_learning_rate=100.0, decay_steps=100, decay_rate=0.96
+        )
     )
-)
 
-base_image = preprocess_image(base_image_path)
-style_reference_image = preprocess_image(style_reference_image_path)
-combination_image = tf.Variable(preprocess_image(base_image_path))
+    base_image = preprocess_image(base_image_path)
+    style_reference_image = preprocess_image(style_reference_image_path)
+    combination_image = tf.Variable(preprocess_image(base_image_path))
 
-iterations = 4000
-for i in range(1, iterations + 1):
-    loss, grads = compute_loss_and_grads(
-        combination_image, base_image, style_reference_image
-    )
-    optimizer.apply_gradients([(grads, combination_image)])
-    if i % 100 == 0:
-        print("Iteration %d: loss=%.2f" % (i, loss))
-        img = deprocess_image(combination_image.numpy())
-        fname = result_prefix + "_at_iteration_%d.png" % i
-        keras.preprocessing.image.save_img(fname, img)
+    iterations = 4000
+    for i in range(1, iterations + 1):
+        loss, grads = compute_loss_and_grads(
+            combination_image, base_image, style_reference_image
+        )
+        optimizer.apply_gradients([(grads, combination_image)])
+        if i % 100 == 0:
+            print("Iteration %d: loss=%.2f" % (i, loss))
+            img = deprocess_image(combination_image.numpy())
+            fname = result_prefix + "_at_iteration_%d.png" % i
+            keras.preprocessing.image.save_img(fname, img)
 
-"""
-After 4000 iterations, you get the following result:
-"""
-fname = result_prefix + ".png"
-keras.preprocessing.image.save_img(fname, img)
+    """
+    After 4000 iterations, you get the following result:
+    """
+    fname = result_prefix + ".png"
+    keras.preprocessing.image.save_img(fname, img)
 
+if __name__ == "__main__":
+    style_image_with_tensorflow_hub()

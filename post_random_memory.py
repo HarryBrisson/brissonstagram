@@ -174,6 +174,7 @@ def post_random_memory():
     post_boomerang_gif_to_twitter()
     create_gram_ready_video()
     create_gram_ready_image()
+    style_image_with_tensorflow_hub()
     send_attachment_over_email(
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
         'Brissonstagram Video', 'temp/gram_ready.mp4'

@@ -149,6 +149,7 @@ def post_gram_image():
 
 
 def post_gram_image2():
+    # update with https://github.com/ping/instagram_private_api?
 
     auth = get_ig_auth()
 

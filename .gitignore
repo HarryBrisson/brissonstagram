@@ -1,7 +1,5 @@
 *.DS_Store
 *.ipynb
-authorizations/aws-credentials.json
-authorizations/ig-credentials.json
 *.pyc
 temp/*.mpg*
 temp/clips/*.mp4*
@@ -9,8 +7,7 @@ temp/*.jpg
 temp/*.png
 temp/*.mp4
 temp/*.gif
-authorizations/twitter-credentials.json
-authorizations/gmail-credentials.json
+authorizations/*.json
 chromedriver
 log*.json
 app/.env/*

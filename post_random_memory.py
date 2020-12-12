@@ -124,10 +124,10 @@ def get_ig_auth():
 
 
 
-def post_gram_image():
+def post_gram_image(filename):
 
     auth = get_ig_auth()
-    image = 'temp/square.png'
+    image = f'temp/{filename}'
     text = '#brissonstagram'
 
 
@@ -180,6 +180,7 @@ def post_random_memory():
         'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
         'Brissonstagram Video', 'temp/gram_ready.mp4'
     )
+    post_gram_image('artsy.png')
     clear_temp_folder_of_media_files()
 
 

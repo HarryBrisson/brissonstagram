@@ -33,7 +33,7 @@ def tensor_to_image(tensor):
 ## Specify paths for 1) content image 2) style image and 3) generated image
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~##
 
-cImPath = 'temp/square.jpg'
+cImPath = 'temp/square.png'
 sImPath = 'temp/style_reference.jpg'
 genImOutputPath = 'temp/artsy.jpg'
 

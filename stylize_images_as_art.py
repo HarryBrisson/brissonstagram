@@ -5,7 +5,7 @@
 # hub code from here:  https://github.com/tensorflow/docs/blob/master/site/en/tutorials/generative/style_transfer.ipynb
 # keras code from: https://github.com/keras-team/keras-io/blob/master/examples/generative/neural_style_transfer.py
 # reference paintings from: https://www.rawpixel.com/board/537381/vincent-van-gogh-free-original-public-domain-paintings
-
+# possible high rez alternative: https://neuralstyle.art/api
 
 import os
 import tensorflow as tf

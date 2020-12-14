@@ -39,6 +39,11 @@ run the initialize script to set up everything you need program and module-wise
 
 `bash initialize.sh`
 
+if you want to set up in a virtual environment, use the below to set up
+
+`python3 -m venv .env`
+`source .env/bin/activate`
+
 now, add in your credentials for aws
 
 `nano authorizations/aws-credentials.json`

@@ -11,11 +11,20 @@ def add_art_to_library(fs=None):
 		fs = s3fs.S3FileSystem()
 
 	key = download_random_clip()
-	clip_name = key.split('/')[-1]
-	filepath = f'brissonstagram/art/{clip_name}.jpg'
+	clip_name = key.split('/')[-1].split('.')[0]
 
 	create_gram_ready_image()
-	style_image_with_tensorflow_hub()
+
+	# check to see if image is just blue?
+	
+	data = style_image_with_tensorflow_hub()
+
+	style_path = data['style']
+	style = style_path.split('/')[-1].split('.')[0]
+
+	print(style)
+
+	filepath = f'brissonstagram/art/{clip_name}--{style}.jpg'
 
 	with open('temp/artsy.jpg','rb') as f:
 		img_data = f.read()

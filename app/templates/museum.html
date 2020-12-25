@@ -1,0 +1,66 @@
+<html>
+
+	<head>
+		<title>Brissonstagram</title>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<script src="{{ url_for('static',filename='scripts/images.js')}}"></script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11458370-2"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-11458370-2');
+		</script>
+		<script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+	</head>
+
+	<body>
+		<a-scene>
+		  <a-assets>
+		    {% for img in data_string %}
+		    	<img id="{{img['id']}}" src="{{img['url']}}">
+			{% endfor %}
+		  </a-assets>
+			<!-- room dimensions // colors from https://javier.xyz/cohesive-colors/ -->
+			<a-plane height="5" width="5" length="5" position="0 0 -2.5" rotation="0 0 0" color="#555E7B" opacity=.8></a-plane><!-- north wall -->
+			<a-plane height="5" width="5" length="5" position="0 0 2.5" rotation="0 -180 0" color="#555E7B" opacity=.8></a-plane><!-- south wall -->
+			<a-plane height="5" width="5" length="5" position="-2.5 0 0" rotation="0 90 0" color="#555E7B" opacity=.8></a-plane><!-- west wall -->
+			<a-plane height="5" width="5" length="5" position="2.5 0 0" rotation="0 -90 0" color="#555E7B" opacity=.8></a-plane><!-- east wall -->
+			<a-plane height="5" width="5" length="5" position="0 -2.5 0" rotation="-90 0 0" color="#555E7B" opacity=.8></a-plane><!-- floor -->
+			<a-plane height="5" width="5" length="5" position="0 2.5 0" rotation="90 0 0" color="#555E7B" opacity=.8></a-plane><!-- ceiling -->
+
+			<!-- need to add labels -->
+
+			<!-- viewer -->
+			<a-entity position="0 -2 0" rotation="0 0 0">
+				<a-camera look-controls wasd-controls="fly:true"></a-camera>
+			</a-entity>
+
+		</a-scene>
+
+		<script>
+
+			d = {{ data_string|tojson }}
+
+			// create cubes for each photo
+			d3.select("a-scene").selectAll(".photoCube")
+					.data(d)
+				.enter().append("a-box")
+					.attr('class','dataCube')
+					.attr('height','.4')
+					.attr('depth','.4')
+					.attr('width','.4')
+					.attr('opacity','.8')
+					.attr('position', d => d['x'] + " " + d['y'] + " " + d['z'])
+					.attr('src', d => "#"+d['id'])
+					.attr('crossorigin', 'anonymous')
+
+		</script>
+
+	</body>
+
+</html>

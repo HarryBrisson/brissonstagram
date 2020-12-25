@@ -11,7 +11,7 @@ from instapy_cli import client
 from functions.s3.s3_downloads import *
 from functions.send_attachment import *
 from functions.respond_to_login_challenge import *
-    
+from stylize_images_as_art import *    
     
 def get_random_clip_key():
     print('accessing list of all clips')
@@ -24,6 +24,7 @@ def download_random_clip():
     key = get_random_clip_key()
     print('downloading {}'.format(key))
     download_file_from_s3('brissonstagram',key,'temp/rawvid.mp4')
+    return key
 
 def get_random_frame_from_clip(video_filename, image_filename):
     sec = random.randrange(5)

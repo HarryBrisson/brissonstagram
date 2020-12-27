@@ -6,7 +6,7 @@ import pprint
 
 import tweepy
 from InstagramAPI import InstagramAPI
-from instapy_cli import client
+import instapy
 
 from functions.s3.s3_downloads import *
 from functions.send_attachment import *
@@ -124,64 +124,12 @@ def get_ig_auth():
 
 
 
-
-def post_gram_image(filename):
-
-    auth = get_ig_auth()
-    image = f'temp/{filename}'
-    text = '#brissonstagram'
-
-
-    InstagramAPI.ver = login_challenge
-    api = InstagramAPI(auth['username'], auth['password'])
-    api.login()
-
-
-
-    try:
-        link = api.LastJson['challenge']['api_path']
-        api.ver(link)
-        api.login()
-    except:
-        pass
-
-
-    api.uploadPhoto(image, caption=text )
-
-
-def post_gram_image2():
-    # update with https://github.com/ping/instagram_private_api?
-
-    auth = get_ig_auth()
-
-    username = auth['username']
-    password = auth['password']
-    cookie = json.dumps(auth['cookie'])
-    image = 'temp/square.png'
-    text = '#brissonstagram'
-
-    with client(username, password, cookie=cookie) as cli:
-        cookies = cli.get_cookie()
-        print(type(cookies)) # == str
-        print(cookies)
-        # do stuffs with cli
-        ig = cli.api()
-        me = ig.current_user()
-        print(me)
-
-        cli.upload(image, text)
-
 def post_random_memory():
     download_random_clip()
     post_boomerang_gif_to_twitter()
     create_gram_ready_video()
     create_gram_ready_image()
     style_image_with_tensorflow_hub()
-    send_attachment_over_email(
-        'brissonstagram@gmail.com', ['ejbrisson@gmail.com'],
-        'Brissonstagram Video', 'temp/gram_ready.mp4'
-    )
-    post_gram_image('artsy.png')
     clear_temp_folder_of_media_files()
 
 

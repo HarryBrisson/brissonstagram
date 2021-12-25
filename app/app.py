@@ -10,9 +10,12 @@ app = Flask(__name__)
 @app.route('/')
 def landing():
 	style = request.args.get('style')
+	filters = request.args.get('filters')
 	if not style or style=="None":
 		style = "jpgs"
-	data_string = get_sample_of_images(folder=style)
+	if filters=='None':
+		filters=None
+	data_string = get_sample_of_images(folder=style, filters=filters)
 	html = render_template('index.html',
 		data_string = data_string)
 	return html

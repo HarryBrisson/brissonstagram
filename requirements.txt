@@ -6,3 +6,4 @@ tensorflow
 tensorflow_hub
 instapy-cli
 s3fs
+aioboto3

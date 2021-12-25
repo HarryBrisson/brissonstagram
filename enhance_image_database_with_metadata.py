@@ -1,4 +1,5 @@
 import json
+import random
 
 import s3fs
 from PIL import Image
@@ -37,7 +38,7 @@ def get_credentialed_rekognition_resource():
 		aws_secret_access_key=cred["aws_secret_access_key"]
 		)
 
-	return s3
+	return client
 
 
 def get_labels_for_image(img_path,client=None):
@@ -46,7 +47,7 @@ def get_labels_for_image(img_path,client=None):
 		client = get_credentialed_rekognition_resource()
 
 	bucket = img_path.split('//')[1].split('.')[0]
-	name = img_path.split('amazon.com/')[1]
+	name = img_path.split('amazonaws.com/')[1]
 
 	response = client.detect_labels(
 	    Image={
@@ -60,25 +61,86 @@ def get_labels_for_image(img_path,client=None):
 	return response
 
 
-def get_metadata_for_image(img_path):
+def get_faces_for_image(img_path,client=None):
 
-	palette_characteristics = get_palette_characteristics(img_path)
-	object_labels = get_labels_for_image(img_path)
-	print(object_labels)
+	if not client:
+		client = get_credentialed_rekognition_resource()
+
+	bucket = img_path.split('//')[1].split('.')[0]
+	name = img_path.split('amazonaws.com/')[1]
+
+	response = client.detect_faces(
+	    Image={
+	        'S3Object': {
+	            'Bucket': bucket,
+	            'Name': name,
+		        }
+		    },
+		)
+
+	return response
 
 
-def get_metadata_for_images(folder="jpgs"):
+
+def get_metadata_for_image(img_path,client=None,fs=None):
+
+	if not fs:
+		fs = s3fs.S3FileSystem()
+
+	metadata_path = img_path.replace('https://','').replace('jpgs','metadata/jpgs').replace('.s3.amazonaws.com','').replace('.jpg','.json')
+
+	if fs.exists(metadata_path):
+		with fs.open(metadata_path) as f:
+			metadata = json.loads(f.read())
+
+	else:
+		if not client:
+			client = get_credentialed_rekognition_resource()
+
+		palette_characteristics = get_palette_characteristics(img_path)
+		object_labels = get_labels_for_image(img_path,client=client)
+		face_labels = get_faces_for_image(img_path,client=client)
+
+		metadata = {
+			'palette':palette_characteristics,
+			'objects':object_labels,
+			'faces':face_labels
+		}
+
+		with fs.open(metadata_path,'w') as f:
+			f.write(json.dumps(metadata))
+
+	return metadata
+
+
+def get_metadata_for_images(folder="jpgs",n=1000,forceRefresh=False):
 
 	fs = s3fs.S3FileSystem()
 
-	with fs.open(f'brissonstagram/inventory/{folder}.json','r') as f:
-		images = json.loads(f.read())
+	metadata_path = f'brissonstagram/inventory/{folder}-metadata.json'
 
-	for i in images:
-		get_metadata_for_image(i.get('url'))
-	
-	return images
+	if fs.exists(metadata_path) and not forceRefresh:
+
+		with fs.open(metadata_path) as f:
+			metadata = json.loads(f.read())
+
+	else:
+		with fs.open(f'brissonstagram/inventory/{folder}.json','r') as f:
+			images = json.loads(f.read())
+
+		sample = random.sample(images,n)
+		metadata = []
+
+		for i in sample:
+			print(i)
+			m = get_metadata_for_image(i.get('url'))
+			metadata.append(m)
+
+		with fs.open(metadata_path,'w') as f:
+			f.write(json.dumps(metadata))
+
+	return metadata
 
 
 if __name__ == "__main__":
-	get_metadata_for_images()
+	get_metadata_for_images(n=10000,forceRefresh=True)

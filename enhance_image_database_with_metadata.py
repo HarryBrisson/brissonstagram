@@ -102,6 +102,7 @@ def get_metadata_for_image(img_path,client=None,fs=None):
 		face_labels = get_faces_for_image(img_path,client=client)
 
 		metadata = {
+			'url':img_path,
 			'palette':palette_characteristics,
 			'objects':object_labels,
 			'faces':face_labels

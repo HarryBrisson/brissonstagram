@@ -4,7 +4,7 @@
         "aws_region": "us-east-1",
         "profile_name": null,
         "project_name": "brissonstagram",
-        "runtime": "python3.6",
+        "runtime": "python3.8",
         "s3_bucket": "brissonstagram-zappa"
     },
     "prod": {
@@ -12,7 +12,7 @@
         "aws_region": "us-east-1",
         "profile_name": "default",
         "project_name": "brissonstagram",
-        "runtime": "python3.6",
+        "runtime": "python3.8",
         "s3_bucket": "zappa-brissonstagram",
         "certificate_arn": "arn:aws:acm:us-east-1:190217484878:certificate/1ac88613-4c70-4bb8-967a-9a636822cb0b",
         "domain": "www.brissonstagram.net",

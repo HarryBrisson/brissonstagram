@@ -1,11 +1,21 @@
 var RIVER_POOL = [];
 var RIVER_TIMER = null;
 var RIVER_IDX = 0;
+var RIVER_BAND = { min: 0, max: 0 };
+
+function update_band(size) {
+  // keep every frame fully inside the river band so none slides under the
+  // footer; account for image height (~4:3) + the year label
+  var h = document.getElementById('river').clientHeight || Math.round(window.innerHeight * 0.6) || 500;
+  var frame_h = size * 0.75 + 18;
+  RIVER_BAND.min = 8;
+  RIVER_BAND.max = Math.max(RIVER_BAND.min + 40, h - frame_h - 8);
+}
 
 function spawn_drift(frame, dur, neg_delay) {
   var el = document.createElement('div');
   el.className = 'drift';
-  el.style.top = (3 + Math.random() * 76) + 'vh';
+  el.style.top = (RIVER_BAND.min + Math.random() * (RIVER_BAND.max - RIVER_BAND.min)) + 'px';
   el.style.animationDuration = dur + 's';
   if (neg_delay) el.style.animationDelay = (-neg_delay) + 's';
   el.innerHTML = '<img src="' + frame.url + '">' +
@@ -26,6 +36,7 @@ function render_river() {
 
   var layer = document.getElementById('river');
   layer.style.setProperty('--river-size', size + 'px');
+  update_band(size);
   if (RIVER_TIMER) clearInterval(RIVER_TIMER);
   layer.innerHTML = '';
   if (!RIVER_POOL.length) return;

@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<title>Brissonstagram — match</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<script src="{{ url_for('static', filename='scripts/match.js') }}"></script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11458370-2"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'UA-11458370-2');
+		</script>
+	</head>
+	<body>
+		<div id="title">
+			<br>
+			<h1>Brissonstagram</h1>
+			<p>find the matching frames — <span id="moves">0</span> moves</p>
+			<p id="status"></p>
+		</div>
+		<div id="board"></div>
+		<div id="footer">
+			<p><a href="/match">new game</a> · <a href="/">home</a> · <a href="/spectrum">spectrum</a> · <a href="/sort">sort</a></p>
+		</div>
+	</body>
+	<script type="text/javascript">
+		data = {{ data_string|tojson }}
+		start_match(data)
+	</script>
+</html>

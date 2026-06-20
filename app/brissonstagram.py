@@ -66,4 +66,82 @@ def get_sample_of_images(folder="jpgs",n=100,force_update=False,filters=None):
 		img[axes[2]] = 1.5-3*random.random()
 	return sample
 
+
+def parse_image_id(url):
+	# urls look like .../jpgs/5b/5b-1992-0288.jpg or .../jpgs/6b/6b-0020.jpg
+	# filename encodes tape-(year-)frame; frame number is the true sequence within a tape
+	stem = url.split('/')[-1].rsplit('.', 1)[0]
+	parts = stem.split('-')
+	tape = parts[0]
+	frame = int(parts[-1]) if parts[-1].isdigit() else None
+	year = int(parts[1]) if len(parts) == 3 and parts[1].isdigit() else None
+	return {'url': url, 'id': stem, 'tape': tape, 'frame': frame, 'year': year}
+
+
+def get_random_images(folder="jpgs", n=8):
+	# distinct images (no repeats) — for the memory match game
+	images = get_image_data(folder=folder)
+	sample = random.sample(images, min(n, len(images)))
+	return [parse_image_id(i['url']) for i in sample]
+
+
+def get_consecutive_frames(folder="jpgs", n=7, tape=None):
+	# a run of consecutive frames from a single tape — for the sort-into-order game
+	frames = [parse_image_id(i['url']) for i in get_image_data(folder=folder)]
+	frames = [f for f in frames if f['frame'] is not None]
+
+	by_tape = {}
+	for f in frames:
+		by_tape.setdefault(f['tape'], []).append(f)
+
+	eligible = [t for t, fs in by_tape.items() if len(fs) >= n]
+	if not eligible:
+		return []
+	if tape not in eligible:
+		tape = random.choice(eligible)
+
+	seq = sorted(by_tape[tape], key=lambda f: f['frame'])
+	start = random.randint(0, len(seq) - n)
+	return seq[start:start + n]
+
+
+def hue_from_palette(palette):
+	# dominant hue (0-360) from the channel weights already stored in metadata
+	r, g, b = palette.get('R', 0), palette.get('G', 0), palette.get('B', 0)
+	mx, mn = max(r, g, b), min(r, g, b)
+	if mx == mn:
+		return 0
+	d = mx - mn
+	if mx == r:
+		h = ((g - b) / d) % 6
+	elif mx == g:
+		h = (b - r) / d + 2
+	else:
+		h = (r - g) / d + 4
+	return h * 60
+
+
+def get_image_metadata(folder="jpgs"):
+	fs = s3fs.S3FileSystem()
+	path = f'brissonstagram/inventory/{folder}-metadata.json'
+	if fs.exists(path):
+		with fs.open(path, 'r') as f:
+			return json.loads(f.read())
+	return []
+
+
+def get_images_by_hue(folder="jpgs", n=160):
+	# every frame ordered into a rainbow spectrum by its dominant hue
+	items = []
+	for m in get_image_metadata(folder=folder):
+		parsed = parse_image_id(m['url'])
+		parsed['hue'] = hue_from_palette(m.get('palette') or {})
+		items.append(parsed)
+	items.sort(key=lambda x: x['hue'])
+	if n and len(items) > n:
+		# even subsample keeps the full color range while capping the count
+		step = len(items) / n
+		items = [items[int(i * step)] for i in range(n)]
+	return items
+
 	

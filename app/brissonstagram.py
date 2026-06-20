@@ -192,7 +192,7 @@ def get_year_round(folder="jpgs"):
 	return {'url': target['url'], 'year': target['year'], 'options': options}
 
 
-def get_river_frames(folder="jpgs", n=9):
+def get_river_frames(folder="jpgs", n=40):
 	# timeline river: a small chronological sample of dated frames
 	dated = [f for f in (parse_image_id(i['url']) for i in get_image_data(folder=folder)) if f['year']]
 	sample = random.sample(dated, min(n, len(dated)))

@@ -58,7 +58,8 @@ def tags():
 
 @app.route('/river')
 def river():
-	n = int(request.args.get('n', 9))
+	# send a chronological pool; the options panel renders a live subset of it
+	n = int(request.args.get('n', 40))
 	data_string = get_river_frames(n=n)
 	return render_template('river.html', data_string=data_string)
 

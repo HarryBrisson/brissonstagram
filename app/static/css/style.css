@@ -184,11 +184,11 @@ button {
 	left: 0;
 	animation-name: drift;
 	animation-timing-function: linear;
-	animation-iteration-count: infinite;
+	animation-iteration-count: 1;
 	will-change: transform;
 }
 .drift img {
-	width: 150px;
+	width: var(--river-size, 150px);
 	display: block;
 	border: 1px solid #222;
 }

@@ -1,15 +1,20 @@
 var RIVER_POOL = [];
+var RIVER_TIMER = null;
+var RIVER_IDX = 0;
 
-function even_sample(arr, k) {
-  if (k >= arr.length) return arr.slice();
-  var step = arr.length / k;
-  var out = [];
-  for (var i = 0; i < k; i++) out.push(arr[Math.floor(i * step)]);
-  return out;
+function spawn_drift(frame, dur, neg_delay) {
+  var el = document.createElement('div');
+  el.className = 'drift';
+  el.style.top = (3 + Math.random() * 76) + 'vh';
+  el.style.animationDuration = dur + 's';
+  if (neg_delay) el.style.animationDelay = (-neg_delay) + 's';
+  el.innerHTML = '<img src="' + frame.url + '">' +
+    '<div class="yr">' + (frame.year || '') + '</div>';
+  el.addEventListener('animationend', function () { el.remove(); });
+  document.getElementById('river').appendChild(el);
 }
 
 function render_river() {
-  var layer = document.getElementById('river');
   var count = +document.getElementById('opt-count').value;
   var size = +document.getElementById('opt-size').value;
   var speed = +document.getElementById('opt-speed').value;
@@ -19,22 +24,29 @@ function render_river() {
   document.getElementById('out-size').textContent = size + 'px';
   document.getElementById('out-speed').textContent = speed;
 
-  // even sample keeps the full chronological range while changing density
-  var frames = even_sample(RIVER_POOL, count);
-  var n = frames.length;
-
+  var layer = document.getElementById('river');
+  layer.style.setProperty('--river-size', size + 'px');
+  if (RIVER_TIMER) clearInterval(RIVER_TIMER);
   layer.innerHTML = '';
-  frames.forEach(function (d, i) {
-    var el = document.createElement('div');
-    el.className = 'drift';
-    el.style.top = (3 + Math.random() * 76) + 'vh';
-    el.style.animationDuration = dur + 's';
-    // negative delay spreads the frames across the crossing immediately, in order
-    el.style.animationDelay = (-(dur / n) * i) + 's';
-    el.innerHTML = '<img src="' + d.url + '" style="width:' + size + 'px">' +
-      '<div class="yr">' + (d.year || '') + '</div>';
-    layer.appendChild(el);
-  });
+  if (!RIVER_POOL.length) return;
+
+  var n = RIVER_POOL.length;
+  // initial fill: spread `count` frames across the screen in chronological
+  // order — oldest furthest left (most progressed), newest just entering
+  for (var j = 0; j < count; j++) {
+    spawn_drift(RIVER_POOL[j % n], dur, dur * ((count - 1 - j) / count));
+  }
+  RIVER_IDX = count;
+
+  // then keep feeding the next frame in order from the right edge, so the
+  // river flows through the whole pool oldest->newest before it wraps
+  RIVER_TIMER = setInterval(function () {
+    // when the tab is hidden, CSS animations pause but setInterval keeps
+    // firing — skip so frames don't pile up at the entry edge
+    if (document.hidden || layer.childElementCount >= count + 4) return;
+    spawn_drift(RIVER_POOL[RIVER_IDX % n], dur, 0);
+    RIVER_IDX++;
+  }, (dur / count) * 1000);
 }
 
 function start_river(data) {

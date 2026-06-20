@@ -1,4 +1,5 @@
 import json
+import math
 import random
 
 import s3fs
@@ -143,5 +144,59 @@ def get_images_by_hue(folder="jpgs", n=160):
 		step = len(items) / n
 		items = [items[int(i * step)] for i in range(n)]
 	return items
+
+
+# Rekognition returns redundant synonym pairs; drop the weaker twin so the cloud reads clean
+TAG_SYNONYM_DROP = {'Human', 'Apparel', 'Sports', 'People'}
+
+
+def labels_for(metadata_record, conf=80):
+	return [l['Name'] for l in (metadata_record.get('objects') or {}).get('Labels', [])
+		if l.get('Confidence', 0) >= conf and l['Name'] not in TAG_SYNONYM_DROP]
+
+
+def get_tag_counts(folder="jpgs", min_count=6, limit=70):
+	# tag cloud: every Rekognition object label, sized by how often it appears
+	counts = {}
+	for m in get_image_metadata(folder=folder):
+		for name in labels_for(m):
+			counts[name] = counts.get(name, 0) + 1
+	tags = [{'tag': k, 'count': v} for k, v in counts.items() if v >= min_count]
+	tags.sort(key=lambda x: -x['count'])
+	tags = tags[:limit]
+	if tags:
+		mx = tags[0]['count']
+		for t in tags:
+			t['size'] = round(14 + 32 * math.sqrt(t['count'] / mx))
+	random.shuffle(tags)  # scramble so the cloud isn't just a sorted list
+	return tags
+
+
+def get_frames_with_tag(folder="jpgs", tag=None, limit=120):
+	# montage: every frame whose labels include this tag
+	matches = [parse_image_id(m['url']) for m in get_image_metadata(folder=folder)
+		if tag in labels_for(m)]
+	total = len(matches)
+	if limit and total > limit:
+		matches = random.sample(matches, limit)
+	return matches, total
+
+
+def get_year_round(folder="jpgs"):
+	# guess-the-year: a dated frame plus three plausible decoy years
+	dated = [f for f in (parse_image_id(i['url']) for i in get_image_data(folder=folder)) if f['year']]
+	target = random.choice(dated)
+	others = list({f['year'] for f in dated} - {target['year']})
+	random.shuffle(others)
+	options = sorted([target['year']] + others[:3])
+	return {'url': target['url'], 'year': target['year'], 'options': options}
+
+
+def get_river_frames(folder="jpgs", n=9):
+	# timeline river: a small chronological sample of dated frames
+	dated = [f for f in (parse_image_id(i['url']) for i in get_image_data(folder=folder)) if f['year']]
+	sample = random.sample(dated, min(n, len(dated)))
+	sample.sort(key=lambda f: (f['year'], f['tape'], f['frame'] if f['frame'] is not None else 0))
+	return sample
 
 	

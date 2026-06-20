@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>Brissonstagram — tags</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11458370-2"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'UA-11458370-2');
+		</script>
+	</head>
+	<body>
+		<div id="title">
+			<br>
+			<h1>Brissonstagram</h1>
+			{% if tag %}
+			<p>{{ tag.lower() }} — {{ total }} frame{{ 's' if total != 1 else '' }}</p>
+			{% else %}
+			<p>what's in the home movies</p>
+			{% endif %}
+		</div>
+
+		{% if tag %}
+		<div id="spectrum">
+			{% for img in data_string %}<img src="{{ img.url }}" loading="lazy">{% endfor %}
+		</div>
+		{% else %}
+		<div id="cloud">
+			{% for t in cloud %}<a href="/tags?tag={{ t.tag|urlencode }}" style="font-size:{{ t.size }}px">{{ t.tag.lower() }}</a> {% endfor %}
+		</div>
+		{% endif %}
+
+		<div id="footer">
+			<p>{% if tag %}<a href="/tags">all tags</a> · {% endif %}<a href="/">home</a> · <a href="/spectrum">spectrum</a> · <a href="/river">river</a> · <a href="/guess">guess</a> · <a href="/match">match</a> · <a href="/sort">sort</a></p>
+		</div>
+	</body>
+</html>

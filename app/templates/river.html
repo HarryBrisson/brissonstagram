@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Brissonstagram — river</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<script src="{{ url_for('static', filename='scripts/river.js') }}"></script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11458370-2"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'UA-11458370-2');
+		</script>
+	</head>
+	<body>
+		<div id="title">
+			<br>
+			<h1>Brissonstagram</h1>
+			<p>a river of memories, oldest to newest</p>
+		</div>
+		<div id="river"></div>
+		<div id="footer">
+			<p><a href="/">home</a> · <a href="/spectrum">spectrum</a> · <a href="/tags">tags</a> · <a href="/guess">guess</a> · <a href="/match">match</a> · <a href="/sort">sort</a></p>
+		</div>
+	</body>
+	<script type="text/javascript">
+		data = {{ data_string|tojson }}
+		start_river(data)
+	</script>
+</html>

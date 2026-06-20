@@ -117,6 +117,77 @@ button {
 	font-size: 14px;
 }
 
+/* object tag cloud */
+#cloud {
+	max-width: 760px;
+	margin: 3% auto 12%;
+	text-align: center;
+	line-height: 1.6;
+}
+#cloud a {
+	color: #bbb;
+	margin: 0 8px;
+	white-space: nowrap;
+}
+#cloud a:hover {
+	color: white;
+}
+
+/* timeline river */
+#river {
+	position: relative;
+	height: 82vh;
+	overflow: hidden;
+}
+.drift {
+	position: absolute;
+	left: 0;
+	animation-name: drift;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	will-change: transform;
+}
+.drift img {
+	width: 150px;
+	display: block;
+	border: 1px solid #222;
+}
+.drift .yr {
+	color: #777;
+	text-align: center;
+	font-size: 12px;
+	margin-top: 4px;
+}
+@keyframes drift {
+	from { transform: translateX(100vw); }
+	to   { transform: translateX(-220px); }
+}
+
+/* guess the year */
+#guess {
+	text-align: center;
+	margin: 2% auto 12%;
+}
+#guess img {
+	max-width: 90%;
+	max-height: 60vh;
+	border: 1px solid #222;
+}
+#options {
+	margin: 18px 0 6px;
+}
+.year-opt {
+	margin: 0 6px;
+	font-size: 18px;
+	padding: 8px 18px;
+}
+.year-opt.right {
+	background: #163; border-color: #3a3;
+}
+.year-opt.wrong {
+	background: #611; border-color: #a33;
+}
+
 
 div.tooltip {	
     position: absolute;			

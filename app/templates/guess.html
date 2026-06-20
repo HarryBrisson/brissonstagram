@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<title>Brissonstagram — guess the year</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<script src="{{ url_for('static', filename='scripts/guess.js') }}"></script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11458370-2"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'UA-11458370-2');
+		</script>
+	</head>
+	<body>
+		<div id="title">
+			<br>
+			<h1>Brissonstagram</h1>
+			<p>what year was this?</p>
+		</div>
+		<div id="guess">
+			<img src="{{ data_string.url }}">
+			<div id="options">
+				{% for y in data_string.options %}<button class="year-opt" data-year="{{ y }}" onclick="guess({{ y }})">{{ y }}</button>{% endfor %}
+			</div>
+			<p id="status">&nbsp;</p>
+		</div>
+		<div id="footer">
+			<p><a href="/guess">next round</a> · <a href="/">home</a> · <a href="/spectrum">spectrum</a> · <a href="/tags">tags</a> · <a href="/river">river</a> · <a href="/match">match</a> · <a href="/sort">sort</a></p>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var ANSWER = {{ data_string.year }};
+	</script>
+</html>

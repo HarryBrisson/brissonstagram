@@ -48,6 +48,25 @@ def sort():
 	data_string = get_consecutive_frames(n=n)
 	return render_template('sort.html', data_string=data_string)
 
+@app.route('/tags')
+def tags():
+	tag = request.args.get('tag')
+	if tag:
+		frames, total = get_frames_with_tag(tag=tag)
+		return render_template('tags.html', tag=tag, data_string=frames, total=total)
+	return render_template('tags.html', tag=None, cloud=get_tag_counts())
+
+@app.route('/river')
+def river():
+	n = int(request.args.get('n', 9))
+	data_string = get_river_frames(n=n)
+	return render_template('river.html', data_string=data_string)
+
+@app.route('/guess')
+def guess():
+	data_string = get_year_round()
+	return render_template('guess.html', data_string=data_string)
+
 if __name__ == '__main__':
     import os
     app.run(debug=True, port=int(os.environ.get('PORT', 5000)))

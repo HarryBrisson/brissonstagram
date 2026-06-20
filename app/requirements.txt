@@ -1,4 +1,8 @@
-s3fs
-flask
-zappa
-boto3
+flask==3.1.3
+zappa==0.62.1
+s3fs==2026.6.0
+# boto stack pinned lockstep — aiobotocore/botocore/boto3 must match or s3fs
+# raises AttributeError on client creation (this is what took the site down)
+aiobotocore==3.7.0
+botocore==1.43.0
+boto3==1.43.0

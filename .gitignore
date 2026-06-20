@@ -11,5 +11,6 @@ authorizations/*.json
 chromedriver
 log*.json
 app/.env/*
+app/.deployvenv/
 style_transfer_archive/*
 .env/*

@@ -59,9 +59,10 @@ def tags():
 @app.route('/river')
 def river():
 	# send a chronological pool; the options panel renders a live subset of it
+	media = request.args.get('media', 'photos')
 	n = int(request.args.get('n', 40))
-	data_string = get_river_frames(n=n)
-	return render_template('river.html', data_string=data_string)
+	data_string = get_river_frames(n=n, media=media)
+	return render_template('river.html', data_string=data_string, media=media)
 
 @app.route('/guess')
 def guess():

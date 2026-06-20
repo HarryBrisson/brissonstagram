@@ -14,3 +14,6 @@ app/.env/*
 app/.deployvenv/
 style_transfer_archive/*
 .env/*
+
+# boomerang generator run artifacts
+temp/boomerang*

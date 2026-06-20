@@ -144,6 +144,20 @@ button {
 	padding: 12px 14px;
 	border-radius: 4px;
 }
+#media-toggle {
+	margin-bottom: 12px;
+}
+#media-toggle a {
+	color: #888;
+	font: 12px sans-serif;
+	text-decoration: none;
+	padding: 3px 8px;
+	border: 1px solid #333;
+}
+#media-toggle a.on {
+	color: white;
+	background: #333;
+}
 #river-opts label {
 	display: block;
 	color: #aaa;
